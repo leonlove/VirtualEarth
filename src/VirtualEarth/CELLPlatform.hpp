@@ -19,7 +19,7 @@
 #   include <windows.h>
 
 
-//#   include <glew/glew.h>
+#   include <gl/glew.h>
 #   include <gl/GL.h>
 #   include <gl/GLu.h>
 

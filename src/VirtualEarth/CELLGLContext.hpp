@@ -73,6 +73,8 @@ namespace   CELL
             _winWidth   =   rt.right - rt.left;
             _winHeight  =   rt.bottom - rt.top;
             _hDC        =   GetDC( _hWnd );
+
+			//wglGetProcAddress();
             if(_format == 0)
             {
                 PixelFormat =   ChoosePixelFormat( _hDC, &pfd );
@@ -91,7 +93,7 @@ namespace   CELL
                 return  false;
             }
             /// glew init
-            /// glewInit();
+            glewInit();
             return  true;
         }
 
