@@ -1,9 +1,11 @@
 #pragma once
 
-#include    "CELLApp.hpp"
-#include    <windows.h>
-#include    <tchar.h>
-#include    "CELLGLContext.hpp"
+#include "CELLApp.hpp"
+#include <windows.h>
+#include <tchar.h>
+#include "CELLGLContext.hpp"
+#include "CELLOpenGL.h"
+#include "CELLFrameBigMap.h"
 
 
 
@@ -13,11 +15,16 @@ namespace CELL
     {
     public:
         HWND            _hWnd;
-        CELLGLContext   _context;
+        CELLGLContext   _contextGL;
+		CELLContext		_context;
+		CELLOpenGL		_device;
+		CELLFrame*		_frame;
+
     public:
         CELLWinApp()
         {
-            _hWnd   =   0;
+            _hWnd  = nullptr;
+			_frame = nullptr;
         }
     public:
         /// 创建窗口函数
@@ -65,58 +72,73 @@ namespace CELL
             UpdateWindow(_hWnd);
 
             HDISPLAY    hDC     =   GetDC(_hWnd);
-            if(!_context.init(_hWnd,hDC))
+            if(!_contextGL.init(_hWnd,hDC))
             {
                 DestroyWindow(_hWnd);
                 return  false;
             }
             return  true;
         }
+
+		CELLFrame* createFrame() {
+			return new CELLFrameBigMap(_context);
+		}
         ///  入口函数
         virtual void    main(int argc, char** argv)
         {
-            MSG msg =   {0};
+			_frame = createFrame();
+			if (_frame)
+			{
+				MSG msg = { 0 };
 #if 0
-            /// 主消息循环: 
-            /// PeekMessage
-            while (GetMessage(&msg, nullptr, 0, 0))
-            {
-                TranslateMessage(&msg);
-                DispatchMessage(&msg);
-            }
+				/// 主消息循环: 
+				/// PeekMessage
+				while (GetMessage(&msg, nullptr, 0, 0))
+				{
+					TranslateMessage(&msg);
+					DispatchMessage(&msg);
+				}
 #else
-            /// 主消息循环: 
-            /// PeekMessage
-            while (msg.message != WM_QUIT)
-            {
-                if (PeekMessage(&msg, nullptr, 0, 0,PM_REMOVE))
-                {
-                    TranslateMessage(&msg);
-                    DispatchMessage(&msg);
-                }
-                render();
-            }
+				/// 主消息循环: 
+				/// PeekMessage
+				while (msg.message != WM_QUIT)
+				{
+					if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+					{
+						TranslateMessage(&msg);
+						DispatchMessage(&msg);
+					}
+					render();
+				}
 #endif
-            _context.shutdown();
+			}
+
+            _contextGL.shutdown();
         }
 
         /// 绘制函数
         void    render()
         {
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            glClearColor(1,0,0,1);
+			_frame->updateFrame(_context);
+			_frame->onBeginFrame(_context);
+			_frame->onEndFrame(_context);
 
-            _context.swapBuffer();
+            _contextGL.swapBuffer();
         }
         LRESULT     eventProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         {
             switch (message)
             {
             case WM_LBUTTONDOWN:
+				_frame->onLButtonDown(LOWORD(lParam), HIWORD(lParam));
                 break;
             case WM_LBUTTONUP:
+				_frame->onLButtonUp(LOWORD(lParam), HIWORD(lParam));
                 break;
             case WM_MOUSEMOVE:
+				_context._mouseX = LOWORD(lParam);
+				_context._mouseY = HIWORD(lParam);
+				_frame->onMouseMove(LOWORD(lParam), HIWORD(lParam));
                 break;
             case WM_MOUSEWHEEL:
                 break;
