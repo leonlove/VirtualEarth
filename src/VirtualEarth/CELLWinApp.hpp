@@ -1,9 +1,10 @@
 #pragma once
 
-#include    "CELLApp.hpp"
-#include    <windows.h>
-#include    <tchar.h>
-#include    "CELLGLContext.hpp"
+#include "CELLApp.hpp"
+#include <windows.h>
+#include <tchar.h>
+#include "CELLGLContext.hpp"
+#include "CELLOpenGL.h"
 
 
 
@@ -14,6 +15,8 @@ namespace CELL
     public:
         HWND            _hWnd;
         CELLGLContext   _context;
+		CELLOpenGL		_device;
+
     public:
         CELLWinApp()
         {
@@ -103,8 +106,8 @@ namespace CELL
         /// »æÖÆº¯Êý
         void    render()
         {
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            glClearColor(1,0,0,1);
+			_device.clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			_device.clearColor(1, 0, 0, 1);
 
             _context.swapBuffer();
         }
