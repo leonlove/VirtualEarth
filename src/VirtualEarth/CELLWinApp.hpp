@@ -6,12 +6,11 @@
 #include "CELLGLContext.hpp"
 #include "CELLOpenGL.h"
 #include "CELLFrameBigMap.h"
-
-
+#include "CELLThread.hpp"
 
 namespace CELL
 {
-    class CELLWinApp :public CELLApp
+    class CELLWinApp :public CELLApp,public CELLThread
     {
     public:
         HWND            _hWnd;
@@ -19,12 +18,13 @@ namespace CELL
 		CELLContext		_context;
 		CELLOpenGL		_device;
 		CELLFrame*		_frame;
-
+		bool			_threadRun;
     public:
         CELLWinApp()
         {
-            _hWnd  = nullptr;
-			_frame = nullptr;
+            _hWnd		= nullptr;
+			_frame		= nullptr;
+			_threadRun	= true;
         }
     public:
         /// 创建窗口函数
@@ -63,6 +63,7 @@ namespace CELL
                                     , nullptr
                                     , hInst
                                     , this);
+
             if (_hWnd == 0 )
             {
                 return  false;
@@ -71,28 +72,64 @@ namespace CELL
             ShowWindow(_hWnd,SW_SHOW);
             UpdateWindow(_hWnd);
 
-            HDISPLAY    hDC     =   GetDC(_hWnd);
-            if(!_contextGL.init(_hWnd,hDC))
-            {
-                DestroyWindow(_hWnd);
-                return  false;
-            }
+			HDISPLAY    hDC = GetDC(_hWnd);
+			if (!_contextGL.init(_hWnd, hDC))
+			{
+				DestroyWindow(_hWnd);
+				return  false;
+			}
             return  true;
         }
 
 		CELLFrame* createFrame() {
 			return new CELLFrameBigMap(_context);
 		}
+
+		/**
+		*   创建完成通知函数
+		*/
+		bool onCreate()
+		{
+			HDISPLAY    hDC = GetDC(_hWnd);
+			if (!_contextGL.init(_hWnd, hDC))
+			{
+				DestroyWindow(_hWnd);
+				return  false;
+			}
+			return  true;
+		}
+		/**
+		*   线程执行函数
+		*/
+		bool onRun()
+		{
+			while (_threadRun)
+			{
+				render();
+			}
+			return  true;
+		}
+
+		/**
+		*   结束函数
+		*/
+		virtual bool    onDestroy()
+		{
+			_contextGL.shutdown();
+			return  false;
+		}
+
         ///  入口函数
         virtual void    main(int argc, char** argv)
         {
 			_frame = createFrame();
 			if (_frame)
 			{
+				CELLThread::start();
+
 				MSG msg = { 0 };
-#if 0
+#if 1
 				/// 主消息循环: 
-				/// PeekMessage
 				while (GetMessage(&msg, nullptr, 0, 0))
 				{
 					TranslateMessage(&msg);
@@ -100,7 +137,6 @@ namespace CELL
 				}
 #else
 				/// 主消息循环: 
-				/// PeekMessage
 				while (msg.message != WM_QUIT)
 				{
 					if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
@@ -110,10 +146,11 @@ namespace CELL
 					}
 					render();
 				}
+				_contextGL.shutdown();
 #endif
 			}
 
-            _contextGL.shutdown();
+
         }
 
         /// 绘制函数
@@ -125,6 +162,8 @@ namespace CELL
 
             _contextGL.swapBuffer();
         }
+
+
         LRESULT     eventProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         {
             switch (message)
@@ -150,6 +189,8 @@ namespace CELL
                 }
                 break;
             case WM_DESTROY:
+				_threadRun = false;
+				CELLThread::join();
                 PostQuitMessage(0);
                 break;
             default:

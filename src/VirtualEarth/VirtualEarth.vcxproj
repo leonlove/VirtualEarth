@@ -169,8 +169,10 @@
     <ClInclude Include="CELLFrame.hpp" />
     <ClInclude Include="CELLGLContext.hpp" />
     <ClInclude Include="CELLInput.hpp" />
+    <ClInclude Include="CELLObject.hpp" />
     <ClInclude Include="CELLOpenGL.h" />
     <ClInclude Include="CELLPlatform.hpp" />
+    <ClInclude Include="CELLThread.hpp" />
     <ClInclude Include="CELLWinApp.hpp" />
     <ClInclude Include="CELLFrameBigMap.h" />
     <ClInclude Include="resource.h" />
