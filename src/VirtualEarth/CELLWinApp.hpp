@@ -7,6 +7,8 @@
 #include "CELLOpenGL.h"
 #include "CELLFrameBigMap.h"
 #include "CELLThread.hpp"
+#include "CELLEvent.hpp"
+#include <cassert>
 
 namespace CELL
 {
@@ -18,13 +20,16 @@ namespace CELL
 		CELLContext		_context;
 		CELLOpenGL		_device;
 		CELLFrame*		_frame;
+        CELLEvent       _set;
 		bool			_threadRun;
+        bool			_makeResult;
     public:
         CELLWinApp()
         {
             _hWnd		= nullptr;
 			_frame		= nullptr;
 			_threadRun	= true;
+            _makeResult = false;
         }
     public:
         /// 创建窗口函数
@@ -78,6 +83,8 @@ namespace CELL
 				DestroyWindow(_hWnd);
 				return  false;
 			}
+            _contextGL.makeCurrentNone();
+
             return  true;
         }
 
@@ -90,13 +97,10 @@ namespace CELL
 		*/
 		bool onCreate()
 		{
-			HDISPLAY    hDC = GetDC(_hWnd);
-			if (!_contextGL.init(_hWnd, hDC))
-			{
-				DestroyWindow(_hWnd);
-				return  false;
-			}
-			return  true;
+            _makeResult = _contextGL.makeCurrent();
+            assert(_makeResult);
+            _set.set();
+            return _makeResult;
 		}
 		/**
 		*   线程执行函数
@@ -126,6 +130,14 @@ namespace CELL
 			if (_frame)
 			{
 				CELLThread::start();
+                _set.wait();
+
+                if (!_makeResult) {
+                    CELLThread::join();
+                    delete _frame;
+                    _contextGL.shutdown();
+                    return;
+                }
 
 				MSG msg = { 0 };
 #if 1

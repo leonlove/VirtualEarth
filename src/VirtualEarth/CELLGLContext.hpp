@@ -97,6 +97,16 @@ namespace   CELL
             return  true;
         }
 
+        bool makeCurrent()
+        {
+            return wglMakeCurrent(_hDC, _hRC);
+        }
+
+        bool makeCurrentNone()
+        {
+            return wglMakeCurrent(NULL, NULL);
+        }
+
         /**
         *   Ïú»ÙEGL
         */
