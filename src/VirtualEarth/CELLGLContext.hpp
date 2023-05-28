@@ -74,7 +74,7 @@ namespace   CELL
             _winHeight  =   rt.bottom - rt.top;
             _hDC        =   GetDC( _hWnd );
 
-			//wglGetProcAddress();
+            
             if(_format == 0)
             {
                 PixelFormat =   ChoosePixelFormat( _hDC, &pfd );
@@ -97,14 +97,14 @@ namespace   CELL
             return  true;
         }
 
-        bool makeCurrent()
+        bool    makeCurrent()
         {
-            return wglMakeCurrent(_hDC, _hRC);
+            return  wglMakeCurrent( _hDC, _hRC );
         }
 
-        bool makeCurrentNone()
+        bool    makeCurrentNone()
         {
-            return wglMakeCurrent(NULL, NULL);
+            return  wglMakeCurrent( 0, 0 );
         }
 
         /**

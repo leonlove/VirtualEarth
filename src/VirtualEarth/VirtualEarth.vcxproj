@@ -23,7 +23,7 @@
     <ProjectGuid>{E3B77A18-B83D-4645-93EF-9D5440A35D37}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>3d-gis</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
     <ProjectName>VirtualEarth</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -43,13 +43,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -165,14 +165,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="CELLApp.hpp" />
-    <ClInclude Include="CELLContext.h" />
+    <ClInclude Include="CELLContext.hpp" />
     <ClInclude Include="CELLEvent.hpp" />
     <ClInclude Include="CELLFrame.hpp" />
     <ClInclude Include="CELLGLContext.hpp" />
     <ClInclude Include="CELLInput.hpp" />
+    <ClInclude Include="CELLMath.hpp" />
     <ClInclude Include="CELLObject.hpp" />
     <ClInclude Include="CELLOpenGL.h" />
     <ClInclude Include="CELLPlatform.hpp" />
+    <ClInclude Include="CELLProgramLibary.h" />
+    <ClInclude Include="CELLResourceMgr.hpp" />
     <ClInclude Include="CELLThread.hpp" />
     <ClInclude Include="CELLWinApp.hpp" />
     <ClInclude Include="CELLFrameBigMap.h" />
@@ -180,7 +183,6 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CELLContext.cpp" />
     <ClCompile Include="CELLOpenGL.cpp" />
     <ClCompile Include="CELLFrameBigMap.cpp" />
     <ClCompile Include="glew.c" />

@@ -1,35 +1,44 @@
 #pragma once
 
-#include "CELLApp.hpp"
-#include <windows.h>
-#include <tchar.h>
-#include "CELLGLContext.hpp"
-#include "CELLOpenGL.h"
-#include "CELLFrameBigMap.h"
-#include "CELLThread.hpp"
-#include "CELLEvent.hpp"
-#include <cassert>
+#include    "CELLApp.hpp"
+#include    <windows.h>
+#include    <tchar.h>
+#include    "CELLGLContext.hpp"
+#include    "CELLOpenGL.h"
+#include    "CELLFrameBigMap.h"
+#include    "CELLContext.hpp"
+#include    "CELLThread.hpp"
+#include    "CELLEvent.hpp"
+#include    "CELLProgramLibary.hpp"
+#include    "CELLResourceMgr.hpp"
+#include    <assert.h>
+
 
 namespace CELL
 {
-    class CELLWinApp :public CELLApp,public CELLThread
+    class CELLWinApp 
+        :public CELLApp
+        ,public CELLThread
     {
     public:
         HWND            _hWnd;
         CELLGLContext   _contextGL;
-		CELLContext		_context;
-		CELLOpenGL		_device;
-		CELLFrame*		_frame;
-        CELLEvent       _set;
-		bool			_threadRun;
-        bool			_makeResult;
+        CELLContext     _context;
+        CELLResourceMgr _resMgr;
+        CELLOpenGL      _device;
+        CELLFrame*      _frame;
+        bool            _threadRun;
+        bool            _makeReuslt;
+        CELLEvent       _event;
     public:
         CELLWinApp()
         {
-            _hWnd		= nullptr;
-			_frame		= nullptr;
-			_threadRun	= true;
-            _makeResult = false;
+            _hWnd               =   0;
+            _frame              =   0;
+            _threadRun          =   true;
+            _makeReuslt         =   false;
+            _context._device    =   &_device;
+            _context._resMgr    =   &_resMgr;
         }
     public:
         /// 创建窗口函数
@@ -68,7 +77,6 @@ namespace CELL
                                     , nullptr
                                     , hInst
                                     , this);
-
             if (_hWnd == 0 )
             {
                 return  false;
@@ -77,119 +85,143 @@ namespace CELL
             ShowWindow(_hWnd,SW_SHOW);
             UpdateWindow(_hWnd);
 
-			HDISPLAY    hDC = GetDC(_hWnd);
-			if (!_contextGL.init(_hWnd, hDC))
-			{
-				DestroyWindow(_hWnd);
-				return  false;
-			}
+            HDISPLAY    hDC     =   GetDC(_hWnd);
+            if(!_contextGL.init(_hWnd,hDC))
+            {
+                DestroyWindow(_hWnd);
+                return  false;
+            }
+            _device.initialize();
+            _context._resMgr->initialize(_context._device);
+            /// 解除与主线程的绑定
             _contextGL.makeCurrentNone();
-
             return  true;
         }
 
-		CELLFrame* createFrame() {
-			return new CELLFrameBigMap(_context);
-		}
-
-		/**
-		*   创建完成通知函数
-		*/
-		bool onCreate()
-		{
-            _makeResult = _contextGL.makeCurrent();
-            assert(_makeResult);
-            _set.set();
-            return _makeResult;
-		}
-		/**
-		*   线程执行函数
-		*/
-		bool onRun()
-		{
-			while (_threadRun)
-			{
-				render();
-			}
-			return  true;
-		}
-
-		/**
-		*   结束函数
-		*/
-		virtual bool    onDestroy()
-		{
-			_contextGL.shutdown();
-			return  false;
-		}
-
+        /// <summary>
+        /// 创建框架
+        /// </summary>
+        virtual CELLFrame*  createFrame()
+        {
+            if (IsWindow(_hWnd))
+            {
+                RECT    rect;
+                GetClientRect(_hWnd, &rect);
+                _context._width     =   rect.right - rect.left;
+                _context._height    =   rect.bottom - rect.top;
+            }
+            else
+            {
+                _context._width     =   64;
+                _context._height    =   64;
+            }
+            return  new CELLFrameBigMap(_context);
+        }
         ///  入口函数
         virtual void    main(int argc, char** argv)
         {
-			_frame = createFrame();
-			if (_frame)
-			{
-				CELLThread::start();
-                _set.wait();
 
-                if (!_makeResult) {
+            _frame  =   createFrame();
+
+            if (_frame != 0)
+            {
+                CELLThread::start();
+
+                _event.wait();
+                if (!_makeReuslt)
+                {
                     CELLThread::join();
-                    delete _frame;
+                    delete  _frame;
                     _contextGL.shutdown();
                     return;
                 }
-
-				MSG msg = { 0 };
+                MSG msg = { 0 };
 #if 1
-				/// 主消息循环: 
-				while (GetMessage(&msg, nullptr, 0, 0))
-				{
-					TranslateMessage(&msg);
-					DispatchMessage(&msg);
-				}
+                /// 主消息循环: 
+                /// PeekMessage
+                while (GetMessage(&msg, nullptr, 0, 0))
+                {
+                    TranslateMessage(&msg);
+                    DispatchMessage(&msg);
+                }
 #else
-				/// 主消息循环: 
-				while (msg.message != WM_QUIT)
-				{
-					if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
-					{
-						TranslateMessage(&msg);
-						DispatchMessage(&msg);
-					}
-					render();
-				}
-				_contextGL.shutdown();
+                /// 主消息循环: 
+                /// PeekMessage
+                while (msg.message != WM_QUIT)
+                {
+                    if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+                    {
+                        TranslateMessage(&msg);
+                        DispatchMessage(&msg);
+                    }
+                    render();
+                }
+                _contextGL.shutdown();
 #endif
-			}
-
-
+            }
+            
         }
 
         /// 绘制函数
-        void    render()
+        virtual void    render()
         {
-			_frame->updateFrame(_context);
-			_frame->onBeginFrame(_context);
-			_frame->onEndFrame(_context);
-
+            if (_frame == 0)
+            {
+                return;
+            }
+            _frame->update(_context);
+            _frame->onFrameStart(_context);
+            _frame->onFrameEnd(_context);
             _contextGL.swapBuffer();
         }
+        //////////////////////////////////////////////////////////////////////////
 
+        /// <summary>
+        /// 创建完成通知函数
+        /// </summary>
+        virtual bool    onCreate()
+        {
+            _makeReuslt =   _contextGL.makeCurrent();
+            assert(_makeReuslt);
+            _event.set();
+            return  _makeReuslt;
+        }
+     
+        /// <summary>
+        /// 线程执行函数
+        /// </summary>
+        virtual bool    onRun()
+        {
+            while (_threadRun)
+            {
+                render();
+            }
+            return  false;
+        }
+        /// <summary>
+        /// 结束函数
+        /// </summary>
+        virtual bool    onDestroy()
+        {
+            _contextGL.shutdown();
+            return  false;
+        }
 
-        LRESULT     eventProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+    protected:
+        LRESULT         eventProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         {
             switch (message)
             {
             case WM_LBUTTONDOWN:
-				_frame->onLButtonDown(LOWORD(lParam), HIWORD(lParam));
+                _frame->onLButtonDown(LOWORD(lParam),HIWORD(lParam));
                 break;
             case WM_LBUTTONUP:
-				_frame->onLButtonUp(LOWORD(lParam), HIWORD(lParam));
+                _frame->onLButtonUp(LOWORD(lParam),HIWORD(lParam));
                 break;
             case WM_MOUSEMOVE:
-				_context._mouseX = LOWORD(lParam);
-				_context._mouseY = HIWORD(lParam);
-				_frame->onMouseMove(LOWORD(lParam), HIWORD(lParam));
+                _context._mouseX = LOWORD(lParam);
+                _context._mouseY = HIWORD(lParam);
+                _frame->onMouseMove(LOWORD(lParam), HIWORD(lParam));
                 break;
             case WM_MOUSEWHEEL:
                 break;
@@ -200,9 +232,20 @@ namespace CELL
                     EndPaint(hWnd, &ps);
                 }
                 break;
+            case WM_SIZE:
+                {
+                    if(IsWindow(_hWnd))
+                    { 
+                        RECT    rect;
+                        GetClientRect(_hWnd,&rect);
+                        _context._width     =   rect.right - rect.left;
+                        _context._height    =   rect.bottom - rect.top;
+                    }
+                }
+                break;
             case WM_DESTROY:
-				_threadRun = false;
-				CELLThread::join();
+                _threadRun  =   false;
+                CELLThread::join();
                 PostQuitMessage(0);
                 break;
             default:
@@ -226,7 +269,7 @@ namespace CELL
             }
             else
             {
-                CELLWinApp*     pApp        =   (CELLWinApp*)GetWindowLongPtr(hWnd,GWL_USERDATA);
+                CELLWinApp*     pApp        =       (CELLWinApp*)GetWindowLongPtr(hWnd,GWL_USERDATA);
                 if (pApp)
                 {
                     return  pApp->eventProc(hWnd,message,wParam,lParam);

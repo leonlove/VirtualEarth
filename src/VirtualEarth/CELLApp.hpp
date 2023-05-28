@@ -10,12 +10,12 @@ namespace CELL
     public:
 
         /// 创建窗口函数
-        virtual bool    createWindow(int width,int height,INSTANCE hInst)  =   0;
-
-		/// 创建框架
-		virtual CELLFrame* createFrame() = 0;
-
+        virtual bool        createWindow(int width,int height,INSTANCE hInst)  =   0;
+        /// <summary>
+        /// 创建框架
+        /// </summary>
+        virtual CELLFrame*  createFrame()   =   0;
         ///  入口函数
-        virtual void    main(int argc,char** argv)  =   0;
+        virtual void        main(int argc,char** argv)  =   0;
     };
 }
