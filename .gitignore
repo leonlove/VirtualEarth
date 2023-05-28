@@ -1,0 +1,14 @@
+/bin
+/temp
+/src/三维地图.VC.VC.opendb
+/src/三维地图.VC.db
+/src/.vs
+src/ipch
+src/VirtualEarth.VC.VC.opendb
+src/VirtualEarth.VC.db
+src/VirtualEarth/VirtualEarth.vcxproj.filters
+src/VirtualEarth/VirtualEarth.vcxproj.user
+
+
+
+
