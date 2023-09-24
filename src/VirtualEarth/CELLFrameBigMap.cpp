@@ -12,6 +12,7 @@ namespace CELL
     CELLFrameBigMap::CELLFrameBigMap(CELLContext& context)
         :CELLFrame(context)
     {
+
     }
 
     CELLFrameBigMap::~CELLFrameBigMap()
@@ -21,38 +22,23 @@ namespace CELL
     void CELLFrameBigMap::update(CELLContext& )
     {
         _context._device->setViewPort(0,0,_context._width,_context._height);
-        _context._screenPrj =   CELL::ortho<real>(0.0f,(real)_context._width,(real)_context._height,0,-1000.0f,1000.0f);
+        //_context._screenPrj =   CELL::ortho<real>(0.0f,(real)_context._width,(real)_context._height,0,-1000.0f,1000.0f);
     }
 
     void CELLFrameBigMap::onFrameStart(CELLContext& context)
     {
         context._device->clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        context._device->clearColor(0, 0, 0, 1);
-
-        /// 顶点数据
-        float2  vLines[2]   =   
-        {
-            float2(0,0),
-            float2(100,100)
-        };
-        Rgba    color(255,0,0,255);
+        context._device->clearColor(0.2f, 0.3f, 0.3f, 1);
 
         /// 获取shader
-        PROGRAM_P2_UC&  prg =   context._resMgr->_PROGRAM_P2_UC;
+        PROGRAM_P3_UC&  prg =   context._resMgr->_PROGRAM_P3_UC;
 
+		//float timeValue = rand() % 100;
+		//float greenValue = (sin(timeValue) / 2.0f);
         prg.begin();
         {
-            context._device->setUniformMatrix4fv(prg._mvp,1,false,context._screenPrj.dataPtr());
-            context._device->setUniform4f(
-                prg._color
-                ,color._r/255.0f
-                ,color._g/255.0f
-                ,color._b/255.0f
-                ,color._a/255.0f
-                );
-            context._device->attributePointer(prg._position,2,GL_FLOAT,GL_FALSE,sizeof(float2),vLines);
-
-            context._device->drawArrays(GL_LINES,0,2);
+			//context._device->setUniform4f(prg._color, greenValue, greenValue, 0.0f, 1.0f);
+			context._resMgr->_Model.Draw();            
         }
         prg.end();
 

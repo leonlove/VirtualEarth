@@ -71,8 +71,8 @@ namespace CELL
                                     , WS_OVERLAPPEDWINDOW
                                     , CW_USEDEFAULT
                                     , 0
-                                    , CW_USEDEFAULT
-                                    , 0
+                                    , width
+                                    , height
                                     , nullptr
                                     , nullptr
                                     , hInst
