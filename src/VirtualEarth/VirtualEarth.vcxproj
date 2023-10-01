@@ -171,6 +171,7 @@
     <ClInclude Include="CELLGLContext.hpp" />
     <ClInclude Include="CELLInput.hpp" />
     <ClInclude Include="CELLMath.hpp" />
+    <ClInclude Include="CELLModel.h" />
     <ClInclude Include="CELLObject.hpp" />
     <ClInclude Include="CELLOpenGL.h" />
     <ClInclude Include="CELLPlatform.hpp" />
@@ -183,6 +184,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CELLModel.cpp" />
     <ClCompile Include="CELLOpenGL.cpp" />
     <ClCompile Include="CELLFrameBigMap.cpp" />
     <ClCompile Include="glew.c" />

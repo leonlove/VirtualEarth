@@ -24,6 +24,7 @@ namespace   CELL
 
     void CELLOpenGL::initialize()
     {
+		glEnable(GL_DEPTH_TEST);
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
         glEnable(GL_LINE_SMOOTH);
