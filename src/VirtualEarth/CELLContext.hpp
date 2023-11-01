@@ -1,6 +1,7 @@
 #pragma once
 
 #include    "CELLMath.hpp"
+#include	"CELLCamera.hpp"
 namespace   CELL
 {
     class   CELLResourceMgr;
@@ -19,8 +20,8 @@ namespace   CELL
         /// 窗口的大小
         int         _width;
         int         _height;
-        /// 2d 屏幕投影矩阵
-        matrix4r    _screenPrj;
+
+		CELLCamera	 _camera;
 
     };
 }

@@ -25,11 +25,11 @@ namespace   CELL
     void CELLOpenGL::initialize()
     {
 		glEnable(GL_DEPTH_TEST);
-        glEnable(GL_CULL_FACE);
-        glCullFace(GL_BACK);
-        glEnable(GL_LINE_SMOOTH);
-        glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
-        glEnable(GL_PROGRAM_POINT_SIZE);
+        //glEnable(GL_CULL_FACE);
+        //glCullFace(GL_BACK);
+		glEnable(GL_LINE_SMOOTH);
+		glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+		glEnable(GL_PROGRAM_POINT_SIZE);
         checkError(__FUNCDNAME__);
     }
 

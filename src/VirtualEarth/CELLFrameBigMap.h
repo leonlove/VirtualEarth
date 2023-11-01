@@ -1,6 +1,6 @@
 #pragma once
 #include "CELLFrame.hpp"
-
+#include "CELLCamera.hpp"
 namespace CELL
 {
     class CELLFrameBigMap :public CELLFrame
@@ -36,6 +36,7 @@ namespace CELL
         /// 鼠标移动事件
         /// </summary>
         virtual void    onMouseMove(int x, int y);
+		
     };
 
 }
