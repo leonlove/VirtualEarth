@@ -28,5 +28,13 @@ namespace   CELL
         /// 结束绘制
         /// </summary>
         virtual void    onFrameEnd(CELLContext& context)  =   0;
+
+		virtual void    onKeyDown(int key) = 0;
+		/// <summary>
+		/// 键盘按下后事件
+		/// </summary>
+		virtual void    onKeyUp(int key) = 0;
+
+		virtual void	onMouseWheel(int delta) = 0;
     };
 }

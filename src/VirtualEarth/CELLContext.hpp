@@ -8,6 +8,11 @@ namespace   CELL
     class   CELLOpenGL;
     class   CELLContext
     {
+	public:
+		CELLContext()
+		{
+			memset(_keyState, 0, sizeof(_keyState));
+		}
     public:
         CELLOpenGL*         _device;
         /// 资源管理者指针
@@ -16,12 +21,12 @@ namespace   CELL
         int         _mouseX;
         /// 鼠标的当前位置Y
         int         _mouseY;
-
+		float		_timePerFrame;
         /// 窗口的大小
         int         _width;
         int         _height;
-
+		byte		_keyState[256];
 		CELLCamera	 _camera;
-
+		matrix4r	 _vp;
     };
 }

@@ -224,7 +224,14 @@ namespace CELL
                 _frame->onMouseMove(LOWORD(lParam), HIWORD(lParam));
                 break;
             case WM_MOUSEWHEEL:
+				_frame->onMouseWheel(GET_WHEEL_DELTA_WPARAM(wParam));
                 break;
+			case WM_KEYDOWN:
+				_frame->onKeyDown(wParam);
+				break;
+			case WM_KEYUP:
+				_frame->onKeyUp(wParam);
+				break;
             case WM_PAINT:
                 {
                     PAINTSTRUCT ps;

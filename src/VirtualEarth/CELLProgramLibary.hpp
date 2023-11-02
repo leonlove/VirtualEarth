@@ -73,7 +73,7 @@ namespace CELL
 	public:
 	//	attribute   _position;
 	//	uniform     _color;
-	//	uniform     _mvp;
+		uniform     _mvp;
 		uniform     _texture1;
 		uniform     _texture2;
 		uniform     _model;
@@ -87,14 +87,12 @@ namespace CELL
 				"#version   330 core\n"
 				"layout (location = 0) in vec3 aPos; \n"
 				"layout (location = 1) in vec2 aTexCoord;\n"
-				"uniform mat4 model;\n"
-				"uniform mat4 view;\n"
-				"uniform mat4 projection;\n"
+				"uniform mat4 _MVP;\n"
 				"out vec3 ourColor;\n"
 				"out vec2 TexCoord;\n"
 				"void main()\n"
 				"{\n"
-				"	gl_Position = projection * view * model * vec4(aPos, 1.0);\n"
+				"	gl_Position = _MVP * vec4(aPos, 1.0);\n"
 				"	TexCoord = aTexCoord;\n"
 				"}\n"
 			};
@@ -115,10 +113,10 @@ namespace CELL
 			{
 				//_position = device->getAttribLocation(_program, "_position");
 				//_color = device->getUniformLocation(_program, "ourColor");
-				//_mvp = device->getUniformLocation(_program, "_MVP");
-				_model = device->getUniformLocation(_program, "model");
-				_view = device->getUniformLocation(_program, "view");
-				_projection = device->getUniformLocation(_program, "projection");
+				_mvp = device->getUniformLocation(_program, "_MVP");
+				//_model = device->getUniformLocation(_program, "model");
+				//_view = device->getUniformLocation(_program, "view");
+				//_projection = device->getUniformLocation(_program, "projection");
 				_texture1 = device->getUniformLocation(_program, "texture1");
 				_texture2 = device->getUniformLocation(_program, "texture2");
 			}

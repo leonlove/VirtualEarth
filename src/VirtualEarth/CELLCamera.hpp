@@ -42,7 +42,7 @@ namespace   CELL
             _matProj    =   CELL::matrix4r(1);
             _matWorld   =   CELL::matrix4r(1);
             _oldLength  =   10;
-            _speed      =   300;
+            _speed      =   10;
             _flag       =   0xFFFFFFFF;
             _target     =   target;
             _eye        =   eye;

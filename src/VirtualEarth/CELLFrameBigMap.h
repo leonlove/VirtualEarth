@@ -1,10 +1,12 @@
 #pragma once
 #include "CELLFrame.hpp"
-#include "CELLCamera.hpp"
+#include "CELLTimestamp.hpp"
 namespace CELL
 {
     class CELLFrameBigMap :public CELLFrame
     {
+	public:
+		CELLTimestamp _timestamp;
     public:
         CELLFrameBigMap(CELLContext& context);
 
@@ -36,7 +38,16 @@ namespace CELL
         /// 鼠标移动事件
         /// </summary>
         virtual void    onMouseMove(int x, int y);
-		
+
+		virtual void	onMouseWheel(int delta);
+		/// <summary>
+		/// 键盘按下事件
+		/// </summary>
+		virtual void    onKeyDown(int key);
+		/// <summary>
+		/// 键盘按下后事件
+		/// </summary>
+		virtual void    onKeyUp(int key);
     };
 
 }
