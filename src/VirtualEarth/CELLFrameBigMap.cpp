@@ -79,7 +79,7 @@ namespace CELL
 				model = model * model2.rotate(angle, tvec3<float>(1.0f, 0.3f, 0.5f));
 				matrix4r mvp = _context._vp * model;
 				context._device->setUniformMatrix4fv(prg._mvp, 1, GL_FALSE, mvp.data());
-				context._resMgr->_Model.Draw();
+				context._resMgr->_Model.Draw(prg);
 			}
 			context._device->setUniform1i(prg._texture1, 0);
 			context._device->setUniform1i(prg._texture2, 1);

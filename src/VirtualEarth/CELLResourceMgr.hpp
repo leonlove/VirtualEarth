@@ -14,8 +14,10 @@ namespace CELL
 
 		Model _Model;
     public:
-        CELLResourceMgr()
-        {}
+        CELLResourceMgr():_Model("")
+        {
+
+		}
         ~CELLResourceMgr()
         {}
     public:
@@ -23,7 +25,6 @@ namespace CELL
         {
             _PROGRAM_P2_UC.initialize(device);
 			_PROGRAM_P3_UC.initialize(device);
-			_Model.initialize(device);
         }
 
         void    destroy()

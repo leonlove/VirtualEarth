@@ -115,12 +115,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;GLEW_STATIC;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../../depends</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../depends/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OpenGL32.lib;assimp-vc140-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../../depends/lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -153,14 +154,15 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;GLEW_STATIC;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../../depends</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../depends/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OpenGL32.lib;assimp-vc140-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../../depends/lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -172,11 +174,12 @@
     <ClInclude Include="CELLGLContext.hpp" />
     <ClInclude Include="CELLInput.hpp" />
     <ClInclude Include="CELLMath.hpp" />
+    <ClInclude Include="CELLMesh.h" />
     <ClInclude Include="CELLModel.h" />
     <ClInclude Include="CELLObject.hpp" />
     <ClInclude Include="CELLOpenGL.h" />
     <ClInclude Include="CELLPlatform.hpp" />
-    <ClInclude Include="CELLProgramLibary.h" />
+    <ClInclude Include="CELLProgramLibary.hpp" />
     <ClInclude Include="CELLResourceMgr.hpp" />
     <ClInclude Include="CELLThread.hpp" />
     <ClInclude Include="CELLTimestamp.hpp" />
@@ -186,6 +189,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CELLMesh.cpp" />
     <ClCompile Include="CELLModel.cpp" />
     <ClCompile Include="CELLOpenGL.cpp" />
     <ClCompile Include="CELLFrameBigMap.cpp" />

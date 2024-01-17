@@ -7,7 +7,7 @@ namespace   CELL
     class   CELLOpenGL;
 
     
-    class   Texture
+    class   TextureBase
     {
     public:
         enum
@@ -21,21 +21,21 @@ namespace   CELL
         unsigned        _texture;
         unsigned        _texType;
     public:
-        Texture(unsigned type = TEXTURE_NONE )
+		TextureBase(unsigned type = TEXTURE_NONE )
             :_texture(0xFFFFFFFF)
             ,_texType(type)
         {}
-        virtual ~Texture()
+        virtual ~TextureBase()
         {}
 
     };
-    class   Texture1d :public Texture
+    class   Texture1d :public TextureBase
     {
     public:
         unsigned        _width;
     public:
         Texture1d()
-            :Texture(TEXTURE_1D)
+            :TextureBase(TEXTURE_1D)
         {
             _width  =   0;
         }
@@ -43,14 +43,14 @@ namespace   CELL
         {}
     };
     
-    class   Texture2dId :public Texture
+    class   Texture2dId :public TextureBase
     {
     public:
         unsigned        _width;
         unsigned        _height;
     public:
         Texture2dId()
-            :Texture(TEXTURE_2D)
+            :TextureBase(TEXTURE_2D)
         {
             _width      =   0;
             _height     =   0;
@@ -59,7 +59,7 @@ namespace   CELL
         {}
     };
 
-    class   Texture3dId :public Texture
+    class   Texture3dId :public TextureBase
     {
     public:
         unsigned        _width;
@@ -67,7 +67,7 @@ namespace   CELL
         unsigned        _depth;
     public:
         Texture3dId()
-            :Texture(TEXTURE_3D)
+            :TextureBase(TEXTURE_3D)
         {
             _width      =   0;
             _height     =   0;
