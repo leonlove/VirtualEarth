@@ -9,20 +9,6 @@ namespace   CELL
 
 	void Model::initialize(CELLOpenGL* device)
 	{
-		// set up vertex data (and buffer(s)) and configure vertex attributes
-		// ------------------------------------------------------------------
-		//float vertices[] = {
-		//	//     ---- 位置 ----       ---- 颜色 ----     - 纹理坐标 -
-		//	0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // 右上
-		//	0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // 右下
-		//	-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // 左下
-		//	-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // 左上
-		//};
-		//unsigned int indices[] = {
-		//	0, 3, 1, // first triangle
-		//	2, 1, 3  // second triangle
-		//};
-
 		float vertices[] = {
 			-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
 			0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
