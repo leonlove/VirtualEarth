@@ -14,7 +14,7 @@ namespace CELL
 
 		Model _Model;
     public:
-        CELLResourceMgr():_Model("")
+        CELLResourceMgr():_Model()
         {
 
 		}
@@ -25,6 +25,7 @@ namespace CELL
         {
             _PROGRAM_P2_UC.initialize(device);
 			_PROGRAM_P3_UC.initialize(device);
+			_Model.loadModel("../../resources/models/nanosuit/nanosuit.obj");
         }
 
         void    destroy()

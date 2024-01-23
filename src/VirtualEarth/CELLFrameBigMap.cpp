@@ -52,37 +52,10 @@ namespace CELL
         /// 获取shader
         PROGRAM_P3_UC&  prg =   context._resMgr->_PROGRAM_P3_UC;
 
-		static long nElapsed = 1.0;
-		nElapsed++;
-
-		tvec3<float> cubePositions[] = {
-			tvec3<float>(0.0f,  0.0f,  0.0f),
-			tvec3<float>(2.0f,  5.0f, -15.0f),
-			tvec3<float>(-1.5f, -2.2f, -2.5f),
-			tvec3<float>(-3.8f, -2.0f, -12.3f),
-			tvec3<float>(2.4f, -0.4f, -3.5f),
-			tvec3<float>(-1.7f,  3.0f, -7.5f),
-			tvec3<float>(1.3f, -2.0f, -2.5f),
-			tvec3<float>(1.5f,  2.0f, -2.5f),
-			tvec3<float>(1.5f,  0.2f, -1.5f),
-			tvec3<float>(-1.3f,  1.0f, -1.5f)
-		};
-
         prg.begin();
         {
-			for (int i = 0; i < 10; i++)
-			{
-				tmat4x4<double> model;
-				model.translate(cubePositions[i]);
-				tmat4x4<double> model2;
-				float angle = 20.0f * i;
-				model = model * model2.rotate(angle, tvec3<float>(1.0f, 0.3f, 0.5f));
-				matrix4r mvp = _context._vp * model;
-				context._device->setUniformMatrix4fv(prg._mvp, 1, GL_FALSE, mvp.data());
-				context._resMgr->_Model.Draw(prg);
-			}
-			context._device->setUniform1i(prg._texture1, 0);
-			context._device->setUniform1i(prg._texture2, 1);
+			context._device->setUniformMatrix4fv(prg._mvp, 1, GL_FALSE, _context._vp.data());
+			context._resMgr->_Model.Draw(prg);
         }
         prg.end();
 

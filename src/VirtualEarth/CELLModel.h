@@ -22,15 +22,17 @@ namespace   CELL
 		std::string directory;
 		bool gammaCorrection;
 
+		Model() {};
 		// constructor, expects a filepath to a 3D model.
 		Model(std::string const &path, bool gamma = false);
 
 		// draws the model, and thus all its meshes
 		void Draw(CELLProgram &shader);
 
-	private:
 		// loads a model with supported ASSIMP extensions from file and stores the resulting meshes in the meshes vector.
 		void loadModel(std::string const &path);
+
+	private:
 
 		// processes a node in a recursive fashion. Processes each individual mesh located at the node and repeats this process on its children nodes (if any).
 		void processNode(aiNode *node, const aiScene *scene);
